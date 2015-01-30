@@ -16,7 +16,7 @@
 	"license" : "MIT",
 	"require" : {
 		"framework-interop/http-module-interface" : "~1.0",
-		"mouf/interop.silex.di": "~1.0",
+		"mouf/interop.silex.di": "~2.0",
 		"mouf/silex-middleware": "~1.0"
 	},
 	"autoload" : {

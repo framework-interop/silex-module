@@ -3,8 +3,8 @@
 namespace Interop\Framework\Silex;
 
 use Interop\Framework\Module;
-use Interop\Framework\ModuleInterface;
 use Interop\Container\ContainerInterface;
+use Mouf\Interop\Silex\Application;
 use Mouf\StackPhp\SilexMiddleware;
 use Interop\Framework\HttpModuleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -26,13 +26,14 @@ class SilexModule implements HttpModuleInterface
     public function getContainer(ContainerInterface $rootContainer)
     {
     	$this->rootContainer = $rootContainer;
-			$this->silex = new Application($this->rootContainer);
+		$this->silex = new Application($this->rootContainer);
+		$this->silex->re
 
-			// Let's put the silex app in the container... that is itself the silex app :)
-			$this->silex['silexApp'] = $this->silex;
+		// Let's put the silex app in the container... that is itself the silex app :)
+		$this->silex['silexApp'] = $this->silex;
 
-			// The app is the container.
-      return $this->silex;
+		// The app is the container.
+        return $this->silex;
     }
 
 	/* (non-PHPdoc)
