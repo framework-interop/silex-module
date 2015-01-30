@@ -1,6 +1,6 @@
 {
 	"name" : "framework-interop/silex-module",
-	"description" : "The package makes the Silex micr-framework a module compatible with framework-interop.",
+	"description" : "This package turns the Silex micro-framework into a module compatible with framework-interop.",
 	"authors" : [
 		{
 			"name" : "David Négrier",
