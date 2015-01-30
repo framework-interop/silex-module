@@ -2,6 +2,7 @@
 
 namespace Interop\Framework\Silex;
 
+use Acclimate\Container\Adapter\PimpleContainerAdapter;
 use Interop\Framework\Module;
 use Interop\Container\ContainerInterface;
 use Mouf\Interop\Silex\Application;
@@ -13,10 +14,12 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
  * This module provides a base Silex application.
  * Other modules can hook on that application.
  */
-class SilexModule implements HttpModuleInterface
+class SilexFrameworkModule implements HttpModuleInterface
 {
+	const SILEX_APP_ENTRY = "silexApp";
+
     private $rootContainer;
-		private $silex;
+	private $silex;
 
     public function getName()
     {
@@ -27,13 +30,13 @@ class SilexModule implements HttpModuleInterface
     {
     	$this->rootContainer = $rootContainer;
 		$this->silex = new Application($this->rootContainer);
-		$this->silex->re
 
 		// Let's put the silex app in the container... that is itself the silex app :)
-		$this->silex['silexApp'] = $this->silex;
+		$this->silex[self::SILEX_APP_ENTRY] = $this->silex;
 
-		// The app is the container.
-        return $this->silex;
+		// The app is the container, but not compatible with ContainerInterop (because of the "get" method that has a different meaning).
+		// Let's wrap it in a container.
+        return new PimpleContainerAdapter($this->silex);
     }
 
 	/* (non-PHPdoc)
@@ -50,5 +53,4 @@ class SilexModule implements HttpModuleInterface
 
 		return new SilexMiddleware($app, $this->silex);
 	}
-
 }
