@@ -58,6 +58,18 @@ class SampleModule extends AbstractSilexModule
 }
 ```
 
+Of course, both the `SilexFrameworkModule` and the `SampleModule` must be registered in `app.php`:
+
+```php
+$app = new Application(
+    [
+        SilexFrameworkModule::class,
+        SampleModule::class
+    ]
+);
+```
+
+
 ##Things you should know
 
 A Silex application embeds a Pimple container. This container will be shared with all the other modules.
