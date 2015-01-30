@@ -1,0 +1,27 @@
+{
+	"name" : "framework-interop/silex-module",
+	"description" : "The package makes the Silex micr-framework a module compatible with framework-interop.",
+	"authors" : [
+		{
+			"name" : "David Négrier",
+			"email" : "d.negrier@thecodingmachine.com",
+			"homepage" : "http://mouf-php.com"
+		}
+	],
+	"keywords" : [
+		"framework-interop",
+		"silex"
+	],
+	"homepage" : "http://github.com/framework-interop/silex-module",
+	"license" : "MIT",
+	"require" : {
+		"framework-interop/http-module-interface" : "~1.0",
+		"mouf/interop.silex.di": "~1.0",
+		"mouf/silex-middleware": "~1.0"
+	},
+	"autoload" : {
+		"psr-4" : {
+			"Interop\\Framework\\Silex\\" : "src/"
+		}
+	}
+}
