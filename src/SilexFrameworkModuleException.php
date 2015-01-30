@@ -7,5 +7,4 @@ namespace Interop\Framework\Silex;
  */
 class SilexFrameworkModuleException extends \Exception
 {
-
 }
