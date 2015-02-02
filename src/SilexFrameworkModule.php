@@ -20,6 +20,14 @@ class SilexFrameworkModule implements HttpModuleInterface
 
     private $rootContainer;
     private $silex;
+    private $prefix;
+
+    /**
+     * @param string $prefix The prefix to use for all the container entries.
+     */
+    public function __construct($prefix = null) {
+        $this->prefix = $prefix;
+    }
 
     public function getName()
     {
@@ -36,7 +44,7 @@ class SilexFrameworkModule implements HttpModuleInterface
 
         // The app is the container, but not compatible with ContainerInterop (because of the "get" method that has a different meaning).
         // Let's wrap it in a container.
-        return new PimpleContainerAdapter($this->silex);
+        return $this->silex->getSilexContainer();
     }
 
     /* (non-PHPdoc)
