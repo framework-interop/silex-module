@@ -60,17 +60,52 @@ class SampleModule extends AbstractSilexModule
 
 Of course, both the `SilexFrameworkModule` and the `SampleModule` must be registered in `app.php`:
 
+**app.php**
 ```php
 $app = new Application(
     [
-        SilexFrameworkModule::class,
-        SampleModule::class
+        $silex = new SilexFrameworkModule(),
+        new SampleModule($silex)
     ]
 );
 ```
 
+Notice how the `SampleModule` module is passed a reference to the `SilexFrameworkModule` class.
 
 ##Things you should know
 
 A Silex application embeds a Pimple container. This container will be shared with all the other modules.
 Therefore, all objects you put in the Silex application will be available from the root container.
+
+## Prefixing the Silex container
+
+If you plan to work with several frameworks (from instance with Silex and Symfony 2), you will certainly run into
+problems regarding identifiers collisions. Indeed, both Silex and Symfony 2 have their containers, and they are 
+using the same instance names for different purposes.
+
+In order to avoid this namespace clashes, you can **prefix** all instances stored into Silex using the `$prefix`
+parameter in the `SilexFrameworkModule` class.
+
+**app.php**
+```php
+$app = new Application(
+    [
+        $silex = new SilexFrameworkModule('silex.'),
+        new SampleModule($silex)
+    ]
+);
+```
+
+Notice the 'silex.' parameter passed to the `SilexFrameworkModule`. When accessing an instance stored into
+Silex from the root container, you will have to prefix it with 'silex.'. 
+
+For instance:
+
+```php
+// We store an instance in Silex
+$silexApp['my_controller'] = $silexApp->share(function($c) { new MyController() }); 
+
+// We retrieve it from the root container using the prefix!
+$rootContainer->get('silex.my_controller');
+```
+

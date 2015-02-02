@@ -18,23 +18,20 @@ abstract class AbstractSilexModule implements ModuleInterface
      */
     private $rootContainer;
 
+    private $silexFrameworkModule;
+
     /**
-     * @var Application
+     * @param string $prefix The prefix to use for all the container entries.
      */
-    protected $silexApp;
+    public function __construct(SilexFrameworkModule $silexFrameworkModule) {
+        $this->silexFrameworkModule = $silexFrameworkModule;
+    }
 
     abstract public function getName();
 
     public function getContainer(ContainerInterface $rootContainer)
     {
         $this->rootContainer = $rootContainer;
-
-        try {
-            $this->silexApp = $this->rootContainer->get(SilexFrameworkModule::SILEX_APP_ENTRY);
-        } catch (NotFoundException $ex) {
-            throw new SilexFrameworkModuleException('Could not find instance "silexApp". The most likely reason is that you did not add the SilexFrameworkModule to the list of available modules in your application.', 0, $ex);
-        }
-
         return;
     }
 
@@ -45,7 +42,7 @@ abstract class AbstractSilexModule implements ModuleInterface
      */
     protected function getSilexApp()
     {
-        return $this->silexApp;
+        return $this->silexFrameworkModule->getSilexApp();
     }
 
     /**

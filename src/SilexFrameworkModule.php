@@ -6,6 +6,8 @@ use Acclimate\Container\Adapter\PimpleContainerAdapter;
 use Interop\Framework\Module;
 use Interop\Container\ContainerInterface;
 use Mouf\Interop\Silex\Application;
+use Mouf\PrefixerContainer\DelegateLookupUnprefixerContainer;
+use Mouf\PrefixerContainer\PrefixerContainer;
 use Mouf\StackPhp\SilexMiddleware;
 use Interop\Framework\HttpModuleInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -37,14 +39,22 @@ class SilexFrameworkModule implements HttpModuleInterface
     public function getContainer(ContainerInterface $rootContainer)
     {
         $this->rootContainer = $rootContainer;
-        $this->silex = new Application($this->rootContainer);
+
+        if ($this->prefix) {
+            $this->silex = new Application(new DelegateLookupUnprefixerContainer($this->rootContainer, $this->prefix));
+        } else {
+            $this->silex = new Application($this->rootContainer);
+        }
 
         // Let's put the silex app in the container... that is itself the silex app :)
         $this->silex[self::SILEX_APP_ENTRY] = $this->silex;
 
-        // The app is the container, but not compatible with ContainerInterop (because of the "get" method that has a different meaning).
-        // Let's wrap it in a container.
-        return $this->silex->getSilexContainer();
+        // Because we are using silex.interop.di, the pimple container is externalized.
+        if ($this->prefix) {
+            return new PrefixerContainer($this->silex->getSilexContainer(), $this->prefix);
+        } else {
+            return $this->silex->getSilexContainer();
+        }
     }
 
     /* (non-PHPdoc)
@@ -60,5 +70,12 @@ class SilexFrameworkModule implements HttpModuleInterface
     public function getHttpMiddleware(HttpKernelInterface $app)
     {
         return new SilexMiddleware($app, $this->silex);
+    }
+
+    /**
+     * @return Application
+     */
+    public function getSilexApp() {
+        return $this->silex;
     }
 }
