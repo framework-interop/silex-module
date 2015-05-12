@@ -25,14 +25,16 @@
 			"Interop\\Framework\\Silex\\" : "src/"
 		}
 	},
-    "framework-interop": {
-		"module-factory": [
-		  {
-			  "name" : "silex-framework-module",
-			  "description" : "Silex module",
-			  "module" : "$silexModule = new Interop\\Framework\\Silex\\SilexFrameworkModule()",
-			  "priority" : 10
-		  }
-		]
-  }
+  	"extra": {
+		"framework-interop": {
+			"module-factory": [
+				{
+					"name" : "silex-framework-module",
+					"description" : "Silex module",
+					"module" : "$silexModule = new Interop\\Framework\\Silex\\SilexFrameworkModule()",
+					"priority" : 0
+				}
+			]
+		}
+	}
 }
